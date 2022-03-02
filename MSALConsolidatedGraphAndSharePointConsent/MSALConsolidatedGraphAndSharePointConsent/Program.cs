@@ -1,4 +1,5 @@
 ﻿using Microsoft.Identity.Client;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace MSALConsolidatedGraphAndSharePointConsent
             const string clientId = "7b46c75f-8bcf-439e-a0fd-9afe2128dd5a"; // OnePlace Solution Desktop Suite - Dev R85
 
             Console.WriteLine("MSAL consolidated Graph & SharePoint consent test app");
-            Console.WriteLine("You should be prompted to login to M365, if you have no existing consent for this \n app you should be presented with scopes for both Graph and SharePoint.");
+            Console.WriteLine("You should be prompted to login to M365, if you have no existing consent for this\napp you should be presented with scopes for both Graph and SharePoint.\n\n");
 
             publicClientApp = PublicClientApplicationBuilder.Create(clientId)
                 .WithRedirectUri("http://localhost")
@@ -32,10 +33,10 @@ namespace MSALConsolidatedGraphAndSharePointConsent
             AuthenticationResult authResultGraph = await AuthenticateWithAzureADAsync(graphScopes, sharepointScopes, accounts.FirstOrDefault());
 
             // Make call to discover the root SharePoint site url from Graph
-            // Console.Write(await MakeGraphApiCall("https://graph.microsoft.com/v1.0/me", authResultGraph.AccessToken));
-            Console.Write(await MakeGraphApiCall("https://graph.microsoft.com/v1.0/sites/root?$select=webUrl", authResultGraph.AccessToken));
+            string sharePointRootWebUrl = ((dynamic)JsonConvert.DeserializeObject(await MakeGraphApiCall("https://graph.microsoft.com/v1.0/sites/root?$select=webUrl", authResultGraph.AccessToken))).webUrl;
+            Console.Write($"SharePoint Root Site WebUrl is: {sharePointRootWebUrl}");
 
-            Console.WriteLine("Hello World!"); 
+
         }
 
         private static async Task<AuthenticationResult> AuthenticateWithAzureADAsync(IEnumerable<string> scopes, IEnumerable<string> extraResourceScopesToConsent, IAccount account)
