@@ -15,7 +15,9 @@ namespace MSALConsolidatedGraphAndSharePointConsent
 
         static async Task Main(string[] args)
         {
-            const string clientId = "f70003ed-5a99-4600-a0d3-531950e2c805"; // OnePlace Solution Desktop Suite - Dev R85
+            // This is the app reg id I have registered as a mulit-tenant app. Feel free to use it or stand up your own app reg
+            // by following the setup instructions in the readme.md
+            const string clientId = "f70003ed-5a99-4600-a0d3-531950e2c805"; 
 
             Console.WriteLine("MSAL consolidated Graph & SharePoint consent test app");
             Console.WriteLine("You should be prompted to login to M365, if you have no existing consent for this\napp you should be presented with scopes for both Graph and SharePoint.\n\n");
@@ -32,15 +34,15 @@ namespace MSALConsolidatedGraphAndSharePointConsent
             // Make first call to get Graph access token (and get consent for all scopes needed Graph + SharePoint)
             AuthenticationResult graphAuthResult = await AuthenticateWithAzureADAsync(graphScopes, sharepointScopesForConsent, accounts.FirstOrDefault());
 
-            // Make call to discover the root SharePoint site url from Graph
+            // Make call to discover the root SharePoint site URL from Graph
             string sharePointRootWebUrl = ((dynamic)JsonConvert.DeserializeObject(
                    await MakeGraphApiCall("https://graph.microsoft.com/v1.0/sites/root?$select=webUrl", graphAuthResult.AccessToken)
                    )).webUrl;
 
             Console.WriteLine($"[Graph API response]\nSharePoint Root Site WebUrl is: {sharePointRootWebUrl}\n");
 
-            // Use MSAL to get SharePoint token
-            // notice we should get no second prompt for consent we did it all without knowing the users SharePoint url
+            // Use MSAL to get SharePoint token (using the actual SharePoint tenant URL in the scope this time)
+            // Notice we should get no second prompt for consent as we did the consent already in the first call without needing to know the users SharePoint URL
             accounts = await publicClientApp.GetAccountsAsync();
             string[] sharepointScopes = new string[] { $"{sharePointRootWebUrl}/allsites.manage" };
             AuthenticationResult sharePointAuthResult = await AuthenticateWithAzureADAsync(sharepointScopes, graphScopes, accounts.FirstOrDefault());          

@@ -97,11 +97,33 @@ consent prompt we show (for the Graph) and pass in this weird Microsoft tenant i
 var result = await app.AcquireTokenInteractive("https://graph.microsoft.com/user.read")
                      .WithExtraScopeToConsent("https://microsoft.sharepoint-df.com/allsites.manage")
                      .ExecuteAsync();
-```.
+```
 
-Get outta town, you know what this did. It gave me the consolidated prompt but have a look at those SharePoint permissions, it's knows who the user is logged in as and it's dynamically switching
+Get outta town, you know what this did? It gave me the consolidated prompt, but have a look at those SharePoint permissions, it knows who the user is, and it's dynamically switched
 out that Microsoft SharePoint tenant for the users tenant without us doing anything!
 
+![Camtoso Consolidated Prompt](docs/camtoso-consolidated-prompt.png)
 
+Alright we've got some crazy undocumented magic going on here, but this does appear to give us the solution to the problem from a consent perspective. I went on to discover that we do still need to
+do the work of finding the users real SharePoint tenant URL because we need to use the real tenant URL in the scope when we try to acquire the SharePoint access token. Remember in that dialog above we were trying
+to acquire just the Graph token but passing in the extra SharePoint scope just for consent.
 
-[https://docs.microsoft.com/en-us/cli/azure/what-is-azure-cli](https://docs.microsoft.com/en-us/cli/azure/what-is-azure-cli)
+With all that background and comments in the code I think you'll find your way through the proof of concept pretty easily. I intentionally kept the code as simplistic as I could (no Graph SDK, no SharePoint SDK, no error handling) just raw
+calls so you can see the mechanics without extra code fluff.
+
+## How to run the code
+I've left my clientId in the code (which points to the multi-tenant app registration in my tenant), feel free to use that and all you've got to do is pull down this repo into Visual Studio and press F5 to start debugging.
+
+If you would rather create an app reg in your own tenant and use it instead, then I suggest using the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/what-is-azure-cli?WT.mc_id=M365-MVP-5002900). This command will create the app reg in your tenant. Grab the resulting application id (clientid) and replace it in the code.
+
+```
+az ad app create --display-name ConsolidatedGraphAndSharePointConsent --native-app true --reply-urls http://localhost --available-to-other-tenants true
+```
+
+It's a .Net Core Console application and as soon as it starts up it will try to get the Graph token. MSAL will pop open a browser window to get you to authenticate (using a Microsoft work/school account) and since you haven't consented,
+after you login  you will see the consent dialog asking for both Graph and SharePoint permissions.
+Once you consent, a call is made to the Graph API to retrieve the actual SharePoint tenant URL which gets output to the console window.
+That SharePoint tenant URL is then used in the scope to acquire a SharePoint access token and then a call to the SharePoint REST API is made and an extract of that response is output to the console to prove the solution end to end works
+and we are making successful calls to both Graph API and SharePoint REST API.
+
+![Consolidate Graph SharePoint Msal Consent App Preview Cameron Dwyer](docs/consolidate-graph-sharepoint-msal-consent-cameron-dwyer.gif)
