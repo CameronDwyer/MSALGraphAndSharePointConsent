@@ -5,9 +5,17 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSALConsolidatedGraphAndSharePointConsent", "MSALConsolidatedGraphAndSharePointConsent\MSALConsolidatedGraphAndSharePointConsent.csproj", "{6F2C11BD-2DB4-40D2-9794-C00B9F0317DE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{AE0E0610-F803-4A04-92E9-AD073FA6395D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{996C8089-2781-43F5-B68A-1F63BE63ED17}"
 	ProjectSection(SolutionItems) = preProject
-		MSALConsolidatedGraphAndSharePointConsent\ms-docs-withextrascopestoconsent.png = MSALConsolidatedGraphAndSharePointConsent\ms-docs-withextrascopestoconsent.png
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{44270912-A1CA-4310-927E-2EAF916E9341}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\app-reg-sp-permission-microsoft-df-tenant.png = ..\docs\app-reg-sp-permission-microsoft-df-tenant.png
+		..\docs\camtoso-consolidated-prompt.png = ..\docs\camtoso-consolidated-prompt.png
+		..\docs\consolidate-graph-sharepoint-msal-consent-cameron-dwyer.gif = ..\docs\consolidate-graph-sharepoint-msal-consent-cameron-dwyer.gif
+		..\docs\ms-docs-withextrascopestoconsent.png = ..\docs\ms-docs-withextrascopestoconsent.png
 	EndProjectSection
 EndProject
 Global
@@ -23,6 +31,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{44270912-A1CA-4310-927E-2EAF916E9341} = {996C8089-2781-43F5-B68A-1F63BE63ED17}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {613D9ECF-8DB8-455B-92D2-174F32FF35E9}
