@@ -69,7 +69,7 @@ var result = await app.AcquireTokenInteractive(scopesForGraph)
 
 ## Challenge 2 - The SharePoint resource endpoint is tenant specific
 Now we are down into the actual format of specifying the individual permission scopes. The Graph ones are pretty straight forward they all look like this 'https://graph.microsoft.com/user.read'
-but what information I could find around the internet for specifying SharePoint permission scopes is the permissions are formatted like this 'https://<YOUR-SHAREPOINT-TENANT>/allsites.manage'. The permission scope itself
+but what information I could find around the internet for specifying SharePoint permission scopes is the permissions are formatted like this 'https://YOUR-SHAREPOINT-TENANT/allsites.manage'. The permission scope itself
 has your SharePoint tenant in it e.g. https://camtoso.sharepoint.com/allsites.manage. Now this may not be an issue if you know the SharePoint tenant, but in my case I'm building
 a multi-tenant application and I can't possibily know who my users are going to be and what tenant they will come from. 
 
