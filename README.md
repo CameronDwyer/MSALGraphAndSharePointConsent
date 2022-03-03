@@ -90,7 +90,7 @@ So under that model how does the app reg know what the SharePoint scope should b
 ![App Reg Sp Permission Microsoft Df Tenant](docs/app-reg-sp-permission-microsoft-df-tenant.png)
 
 Ok so that's intriguing, what is this https://microsoft.sharepoint-df.com, it's not the name of my tenant that I've created the app reg in. My best guess is that it stands for dogfood and it's the Microsoft SharePoint dogfood tenant.
-Alright so maybe there's something magical about this tenant, let's put it to the test. Rather than worry about trying to figure out the actual SharePoint tenant for our user let's that the first
+Alright so maybe there's something magical about this tenant, let's put it to the test. Rather than worry about trying to figure out the actual SharePoint tenant for our user let's change the first
 consent prompt we show (for the Graph) and pass in this weird Microsoft tenant in the .WithExtraScopeToConsent. So now we are conceptually going to do this:
 
 ```
